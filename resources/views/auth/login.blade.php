@@ -6,6 +6,11 @@
 <section class="auth-section">
     <div class="auth-container">
         <h1>Вход</h1>
+        <p class="auth-link" style="text-align:left; margin-top: 0; margin-bottom: 1rem;">
+            Директор: KmX11e@PmX.com / PaMOe12_61//Ej<br>
+            Контент-менеджер: KrEat11@main.com / KreAte11#<br>
+            Менеджер: MAzo22@main.com / MoKXt23#
+        </p>
         @if ($errors->any())
             <ul class="auth-errors">
                 @foreach ($errors->all() as $error)
@@ -13,9 +18,7 @@
                 @endforeach
             </ul>
         @endif
-        @if (session('success'))
-            <p class="auth-success">{{ session('success') }}</p>
-        @endif
+        @include('partials.flash-success', ['extraClass' => 'site-flash-success--mb'])
         <form method="POST" action="{{ route('login.post') }}" class="auth-form">
             @csrf
             <div class="form-group">

@@ -18,20 +18,26 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed', Password::defaults()],
-        ]);
+        $validated = $request->validate(
+            [
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+                'password' => ['required', 'confirmed', Password::defaults()],
+            ],
+            [
+                'password.confirmed' => 'Пароли не совпадают. Проверьте ввод в поле "Повторите пароль".',
+            ]
+        );
 
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
+            'role' => 'customer',
         ]);
 
         Auth::login($user);
 
-        return redirect()->intended(route('stores.index'))->with('success', 'Регистрация прошла успешно.');
+        return redirect()->intended(route('account.index'));
     }
 }

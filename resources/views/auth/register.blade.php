@@ -13,7 +13,7 @@
                 @endforeach
             </ul>
         @endif
-        <form method="POST" action="{{ route('register') }}" class="auth-form">
+        <form method="POST" action="{{ route('register.post') }}" class="auth-form">
             @csrf
             <div class="form-group">
                 <label for="name">Имя</label>
@@ -28,7 +28,7 @@
                 <input type="password" id="password" name="password" required>
             </div>
             <div class="form-group">
-                <label for="password_confirmation">Подтверждение пароля</label>
+                <label for="password_confirmation">Повторите пароль</label>
                 <input type="password" id="password_confirmation" name="password_confirmation" required>
             </div>
             <button type="submit" class="btn-auth">Зарегистрироваться</button>

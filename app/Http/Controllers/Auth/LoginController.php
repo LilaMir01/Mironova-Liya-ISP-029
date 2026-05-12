@@ -22,7 +22,15 @@ class LoginController extends Controller
 
         if (Auth::attempt($validated, (bool) $request->boolean('remember'))) {
             $request->session()->regenerate();
-            return redirect()->intended(route('stores.index'))->with('success', 'Вы вошли в систему.');
+            $user = Auth::user();
+            $target = match ($user->role) {
+                'director' => route('director.dashboard'),
+                'content_manager' => route('products.index'),
+                'content_creator' => route('products.index'),
+                'manager' => route('manager.orders'),
+                default => route('account.index'),
+            };
+            return redirect()->intended($target);
         }
 
         return back()->withErrors([

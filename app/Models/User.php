@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -48,6 +49,41 @@ class User extends Authenticatable
 
     public function isAdmin(): bool
     {
-        return $this->email === 'admin@admin.com';
+        return $this->role === 'director';
+    }
+
+    public function isDirector(): bool
+    {
+        return $this->role === 'director';
+    }
+
+    public function isContentManager(): bool
+    {
+        return $this->role === 'content_manager';
+    }
+
+    public function isContentCreator(): bool
+    {
+        return $this->isContentManager();
+    }
+
+    public function isManager(): bool
+    {
+        return $this->role === 'manager';
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function contactMessages()
+    {
+        return $this->hasMany(ContactMessage::class);
+    }
+
+    public function isCustomer(): bool
+    {
+        return $this->role === 'customer';
     }
 }

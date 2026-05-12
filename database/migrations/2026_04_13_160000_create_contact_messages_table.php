@@ -6,21 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     * Склады (торговые точки).
-     */
     public function up(): void
     {
-        Schema::create('warehouses', function (Blueprint $table) {
+        Schema::create('contact_messages', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('email');
+            $table->string('subject')->nullable();
+            $table->text('body');
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('warehouses');
+        Schema::dropIfExists('contact_messages');
     }
 };

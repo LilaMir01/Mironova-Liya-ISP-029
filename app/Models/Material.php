@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Material extends Model
 {
@@ -14,6 +13,9 @@ class Material extends Model
         'product_name',
         'color',
         'dimensions',
+        'dimensions_unit',
+        'description',
+        'image_path',
         'price',
     ];
 
@@ -33,17 +35,39 @@ class Material extends Model
         return $this->belongsTo(Manufacturer::class, 'manufacturer_id');
     }
 
-    /** Остатки по складам */
-    public function warehouseStocks(): HasMany
-    {
-        return $this->hasMany(WarehouseStock::class, 'material_id');
-    }
-
     /** Краткое описание для вывода в таблицах */
     public function getDisplayNameAttribute(): string
     {
         $type = $this->materialType?->name ?? '—';
         $manuf = $this->manufacturer?->name ?? '—';
-        return "{$type}, {$manuf}, {$this->product_name}" . ($this->dimensions ? ", {$this->dimensions}" : '') . ", {$this->price} ₽";
+        $priceLabel = number_format((float) $this->price, 0, '.', ',');
+
+        return "{$type}, {$manuf}, {$this->product_name}" . ($this->dimensions_label ? ", {$this->dimensions_label}" : '') . ", {$priceLabel} ₽";
+    }
+
+    public function getDimensionsLabelAttribute(): ?string
+    {
+        $dims = trim((string) ($this->dimensions ?? ''));
+        if ($dims === '') {
+            return null;
+        }
+
+        $unit = trim((string) ($this->dimensions_unit ?? ''));
+        return $unit !== '' ? "{$dims} {$unit}" : $dims;
+    }
+
+    /** URL изображения товара (файл в storage или внешняя ссылка) */
+    public function getImageUrlAttribute(): ?string
+    {
+        $p = $this->image_path;
+        if ($p === null || $p === '') {
+            return null;
+        }
+        if (str_starts_with($p, 'http://') || str_starts_with($p, 'https://')) {
+            return $p;
+        }
+
+        return asset($p);
     }
 }
+

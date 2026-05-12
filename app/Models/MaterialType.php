@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class MaterialType extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'slug', 'category_slug', 'image_path'];
 
     /** Связь: один тип — много материалов (внешний ключ material_type_id в materials) */
     public function materials(): HasMany

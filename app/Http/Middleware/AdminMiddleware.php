@@ -10,8 +10,8 @@ class AdminMiddleware
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (!$request->user() || !$request->user()->isAdmin()) {
-            abort(403, 'Доступ запрещён. Только администратор может вносить изменения.');
+        if (!$request->user() || !$request->user()->isDirector()) {
+            abort(403, 'Доступ запрещён. Только директор может вносить изменения.');
         }
 
         return $next($request);
